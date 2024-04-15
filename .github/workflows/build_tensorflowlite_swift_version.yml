@@ -45,7 +45,7 @@ jobs:
           repository: 'tareksabry1337/TensorFlowLiteC'
           path: '${{ github.workspace }}/tensorflowlitec'
           fetch-tags: true
-          ref: 'v${{ github.event.inputs.release_version }}'
+          ref: '${{ github.event.inputs.release_version }}'
           
       - name: Copy TensorFlowLiteSwift Files
         if: steps.check-tag.outputs.exists == 'false'
