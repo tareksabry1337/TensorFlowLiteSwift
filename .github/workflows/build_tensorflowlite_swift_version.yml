@@ -54,16 +54,21 @@ jobs:
           git add Sources/*
           git commit -m "Add TensorFlowLiteSwift Files"
           
-#      - name: Update Package.swift
-#        if: steps.check-tag.outputs.exists == 'false'
-#        run: |
-#          cp -f Package.swift.in Package.swift
-#          sed -i '' -e "s|{{TENSOR_FLOW_LITE_C_API_URL}}|${{ env.TENSOR_FLOW_LITE_C_API_URL }}|g" Package.swift
-#          sed -i '' -e "s|{{TENSOR_FLOW_LITE_C_CHECKSUM}}|${{ env.TENSOR_FLOW_LITE_C_CHECKSUM }}|g" Package.swift
-#          sed -i '' -e "s|{{TENSOR_FLOW_LITE_C_CORE_ML_API_URL}}|${{ env.TENSOR_FLOW_LITE_C_CORE_ML_API_URL }}|g" Package.swift
-#          sed -i '' -e "s|{{TENSOR_FLOW_LITE_C_CORE_ML_CHECKSUM}}|${{ env.TENSOR_FLOW_LITE_C_CORE_ML_CHECKSUM }}|g" Package.swift
-#          git add Package.swift
-#          git commit -m "Update Package.swift"
+      - name: Update Package.swift
+        if: steps.check-tag.outputs.exists == 'false'
+        run: |
+          cp -f Package.swift.in Package.swift
+          TENSOR_FLOW_LITE_C_PACKAGE=${{ github.workspace }}/tensorflowlitec/Package.swift
+          TENSOR_FLOW_LITE_C_API_URL=$(grep -A 2 -e 'name: "TensorFlowLiteC"' $TENSOR_FLOW_LITE_C_PACKAGE | grep url | sed 's/ *url: "\(.*\)",/\1/')
+          TENSOR_FLOW_LITE_C_CHECKSUM=$(grep -A 2 -e 'name: "TensorFlowLiteC"' $TENSOR_FLOW_LITE_C_PACKAGE | grep checksum | sed 's/ *checksum: "\(.*\)"/\1/')
+          TENSOR_FLOW_LITE_C_CORE_ML_API_URL=$(grep -A 2 -e 'name: "TensorFlowLiteCCoreML"' $TENSOR_FLOW_LITE_C_PACKAGE | grep url | sed 's/ *url: "\(.*\)",/\1/')
+          TENSOR_FLOW_LITE_C_CORE_ML_CHECKSUM=$(grep -A 2 -e 'name: "TensorFlowLiteCCoreML"' $TENSOR_FLOW_LITE_C_PACKAGE | grep checksum | sed 's/ *checksum: "\(.*\)"/\1/')
+          sed -i '' -e "s|{{TENSOR_FLOW_LITE_C_API_URL}}|$TENSOR_FLOW_LITE_C_API_URL|g" Package.swift
+          sed -i '' -e "s|{{TENSOR_FLOW_LITE_C_CHECKSUM}}|$TENSOR_FLOW_LITE_C_CHECKSUM|g" Package.swift
+          sed -i '' -e "s|{{TENSOR_FLOW_LITE_C_CORE_ML_API_URL}}|$TENSOR_FLOW_LITE_C_CORE_ML_API_URL|g" Package.swift
+          sed -i '' -e "s|{{TENSOR_FLOW_LITE_C_CORE_ML_CHECKSUM}}|$TENSOR_FLOW_LITE_C_CORE_ML_CHECKSUM|g" Package.swift
+          git add Package.swift
+          git commit -m "Update Package.swift"
           
       - name: Push code changes
         if: steps.check-tag.outputs.exists == 'false'
