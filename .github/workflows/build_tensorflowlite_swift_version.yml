@@ -74,5 +74,7 @@ jobs:
         if: steps.check-tag.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
+          target_commitish: 'release-${{ github.event.inputs.release_version }}'
           tag_name: ${{ github.event.inputs.release_version }}
+          make_latest: false
 
