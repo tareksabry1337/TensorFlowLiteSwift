@@ -81,5 +81,5 @@ jobs:
         with:
           target_commitish: 'release-${{ github.event.inputs.release_version }}'
           tag_name: ${{ github.event.inputs.release_version }}
-          make_latest: false
+          make_latest: 'false'
 
