@@ -51,10 +51,9 @@ jobs:
         if: steps.check-tag.outputs.exists == 'false'
         run: |
           find ${{ github.workspace }}/tensorflow/tensorflow/lite/swift/Sources -type f ! -name 'MetalDelegate.swift' -exec cp -v {} ${{ github.workspace }}/Sources/TensorFlowLiteSwift \;
-          cd ${{ github.workspace }}/Sources
-          ls -R
-          cd ${{ github.workspace }}/tensorflowlitec
-          ls -R
+          git add -A
+          git commit -m "Add TensorFlowLiteSwift Files"
+          git push -u origin release-${{ github.event.inputs.release_version }}
           
           
 #      - name: Upload Release
