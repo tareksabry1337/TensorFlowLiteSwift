@@ -50,7 +50,7 @@ jobs:
       - name: Copy TensorFlowLiteSwift Files
         if: steps.check-tag.outputs.exists == 'false'
         run: |
-          cp -R -v !(MetalDelegate.swift) ${{ github.workspace }}/tensorflow/tensorflow/lite/swift/Sources ${{ github.workspace }}/Sources/TensorFlowLiteSwift
+          find ${{ github.workspace }}/tensorflow/tensorflow/lite/swift/Sources -type f ! -name 'MetalDelegate.swift' -exec cp -v {} ${{ github.workspace }}/Sources/TensorFlowLiteSwift \;
           cd ${{ github.workspace }}/Sources
           ls -R
           cd ${{ github.workspace }}/tensorflowlitec
